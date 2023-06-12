@@ -12,4 +12,18 @@ Actor "Offizieller" as offical
 Actor "Zuschauer\nInteressierter" as follower
 Rectangle "Cloud DB\nz.B. Ringer-DB"
 
+veranstalter .do. system
+ausrichter .do. system
+offical .do. system
+
+trainer .do. system
+ringer .do. system
+follower .do. system
+
+wkb .up. system
+matte .up. system
+waage .up. system
+
+cloud .up. system
+
 @enduml
