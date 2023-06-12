@@ -5,12 +5,13 @@ Rectangle "Champ-Wrestling" <<system>> as system
 Actor "Veranstalter" as veranstalter
 Actor "Ausrichter" as ausrichter
 Actor "Wettkampfbüro" as wkb
-Actor "Matte X\nKampfrichtertisch" as krt
+Actor "Matte" as matte
+Actor "Waage" as waage
 Actor "Trainer" as trainer
 Actor "Ringer" as ringer
 Actor "Offizieller" as offical
 Actor "Zuschauer\nInteressierter" as follower
-Rectangle "Cloud DB\nz.B. Ringer-DB"
+Rectangle "External Cloud DB\nz.B. Ringer-DB" as cloud
 
 veranstalter .do. system
 ausrichter .do. system
