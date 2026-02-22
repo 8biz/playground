@@ -3,7 +3,7 @@ My playground to test github features
 
 Little games:
 - [Memory 1](https://raw.githack.com/8biz/playground/main/little-games/memory.html)
-- [Franka's Memory](https://raw.githack.com/8biz/playground/main/little-games/franka-memory.html)
+- [Franka's Memory](https://raw.githack.com/8biz/playground/main/little-games/frankas-memory.html)
 
 
 
