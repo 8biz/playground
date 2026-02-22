@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Spiel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(6, 100px);
+            grid-template-rows: repeat(4, 100px);
+            gap: 10px;
+            justify-content: center;
+            margin: 20px auto;
+        }
+
+        .card {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            border-radius: 5px;
+            border: 1px solid darkred;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: transparent;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .card.flipped {
+            color: black;
+            background-color: white;
+        }
+
+        #resetButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Memory-Spiel</h1>
+    <div id="score">Punkte: 0</div>
+    <div id="attempts">Versuche: 0</div>
+    <div class="grid" id="grid"></div>
+    <button id="resetButton">Neues Spiel</button>
+
+    <script>
+        const emojis = ['😀', '😂', '😍', '😎', '😢', '😡'];
+        const doubledEmojis = [...emojis, ...emojis]; // 12 Karten
+        let firstCard, secondCard, hasFlippedCard = false;
+        let lockBoard = false;
+        let score = 0;
+        let attempts = 0;
+
+        // Shuffle the cards
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Generate the game board
+        function createBoard() {
+            const grid = document.getElementById("grid");
+            const shuffledEmojis = shuffle(doubledEmojis);
+            shuffledEmojis.forEach(emoji => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.setAttribute('data-emoji', emoji);
+                card.innerHTML = emoji; // Hier das Emoji hinzufügen
+                card.style.color = 'transparent'; // Farbe auf transparent initial setzen
+                card.addEventListener('click', flipCard);
+                grid.append(card);
+            });
+        }
+
+        // Flip a card
+        function flipCard() {
+            if (lockBoard) return;
+            if (this === firstCard) return;
+
+            this.classList.add('flipped');
+            this.style.color = 'black'; // Smiley sichtbar machen
+
+            if (!hasFlippedCard) {
+                hasFlippedCard = true;
+                firstCard = this;
+                return;
+            }
+
+            secondCard = this;
+            attempts++;
+            document.getElementById('attempts').innerText = `Versuche: ${attempts}`;
+
+            checkForMatch();
+        }
+
+        // Check for a match
+        function checkForMatch() {
+            const isMatch = firstCard.dataset.emoji === secondCard.dataset.emoji;
+            lockBoard = true;
+
+            if (isMatch) {
+                score++;
+                document.getElementById('score').innerText = `Punkte: ${score}`;
+                resetBoard();
+            } else {
+                setTimeout(() => {
+                    firstCard.classList.remove('flipped');
+                    secondCard.classList.remove('flipped');
+                    firstCard.style.color = 'transparent';
+                    secondCard.style.color = 'transparent';
+                    resetBoard();
+                }, 1000);
+            }
+        }
+
+        // Reset the board
+        function resetBoard() {
+            [hasFlippedCard, lockBoard] = [false, false];
+            firstCard = null;
+            secondCard = null;
+
+            if (score === emojis.length) {
+                setTimeout(() => alert("Glückwunsch! Du hast alle Paare gefunden!"), 500);
+            }
+        }
+
+        // Reset the game
+        document.getElementById('resetButton').addEventListener('click', () => {
+            score = 0;
+            attempts = 0;
+            document.getElementById('score').innerText = `Punkte: ${score}`;
+            document.getElementById('attempts').innerText = `Versuche: ${attempts}`;
+            document.getElementById("grid").innerHTML = '';
+            createBoard();
+        });
+
+        // Initial setup
+        createBoard();
+    </script>
+</body>
+</html>
